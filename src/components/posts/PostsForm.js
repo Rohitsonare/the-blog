@@ -19,7 +19,10 @@ function PostsForm({posts: prevPosts, setPosts}) {
       postId: generateRandomId('post'),
     };
     // Update the posts state
-    setPosts([...prevPosts, newPost]);
+    const updatedPosts = [...prevPosts, newPost];
+    setPosts(updatedPosts);
+
+    localStorage.setItem('posts', JSON.stringify(updatedPosts));
 
     // Reset the form
     setTitle('');
