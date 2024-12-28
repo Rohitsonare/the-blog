@@ -4,7 +4,7 @@ import PostsForm from './components/posts/PostsForm';
 import PostsList from './PostsList';
 
 function App() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(JSON.parse(localStorage.getItem('posts')) || []);
 
   return (
     <div className="App">
