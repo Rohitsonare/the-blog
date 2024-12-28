@@ -1,40 +1,30 @@
 import { useState } from 'react';
 import '../../App.css'; 
 
-function PostsForm() {
-  // Generate a random user ID function
-  const generateRandomUserId = () => {
-    return 'user_' + Math.random().toString(36).substr(2, 9); 
+function PostsForm({posts: prevPosts, setPosts}) {
+  // Generate a random user uuid
+  const generateRandomId = (resource) => {
+    return `${resource}_${Math.floor(Math.random() * 1000)}`;
   };
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
 
-  const [formData, setFormData] = useState({
-    title: '',
-    body: '',
-    userId: generateRandomUserId(), 
-  });
+  function handleSubmit(e) {
+    e.preventDefault();
+    // Create a new post object
+    const newPost = {
+      title,
+      body,
+      userId: generateRandomId('user'),
+      postId: generateRandomId('post'),
+    };
+    // Update the posts state
+    setPosts([...prevPosts, newPost]);
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setIsSubmitted(true);
-    console.log('Post Submitted:', formData);
-
-   
-    setFormData({
-      title: '',
-      body: '',
-      userId: generateRandomUserId(), 
-    });
-  };
+    // Reset the form
+    setTitle('');
+    setBody('');
+  }
 
   return (
     <div className="App">
@@ -48,8 +38,8 @@ function PostsForm() {
             type="text"
             id="title"
             name="title"
-            value={formData.title}
-            onChange={handleChange}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             required
             placeholder="Enter post title"
           />
@@ -61,11 +51,10 @@ function PostsForm() {
           <textarea
             id="body"
             name="body"
-            value={formData.body}
-            onChange={handleChange}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
             required
             placeholder="Enter post content"
-            rows="5"
           />
         </div>
 
